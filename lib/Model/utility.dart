@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 class CentralStation {
   static bool _updateNeeded ;
 
-  static final fontColor = Color(0xff595959);
-  static final  borderColor = Color(0xffd3d3d3) ;
+  static const fontColor = Color(0xff595959);
+  static const  borderColor = Color(0xffd3d3d3) ;
 
   static init() {
-    if (_updateNeeded == null)
-      _updateNeeded = true;
+    _updateNeeded ??= true;
   }
   static bool get updateNeeded {
     init();
@@ -38,7 +37,7 @@ class CentralStation {
       dateString += todayFormat.format(dtInLocal);
     } else if ( (diff.inDays) == 1 || (diff.inSeconds < 86400 && now.day != dtInLocal.day)) {
       var yesterdayFormat = DateFormat("h:mm a");
-      dateString +=  "Yesterday, " + yesterdayFormat.format(dtInLocal) ;
+      dateString +=  "Yesterday, ${yesterdayFormat.format(dtInLocal)}" ;
     } else if(now.year == dtInLocal.year && diff.inDays > 1){
       var monthFormat = DateFormat("MMM d");
       dateString +=  monthFormat.format(dtInLocal);

@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 
@@ -25,7 +27,7 @@ class Note {
       'is_archived': is_archived  //  for later use for integrating archiving
     };
     if(forUpdate){
-      data["id"] = this.id;
+      data["id"] = id;
     }
     return data;
   }

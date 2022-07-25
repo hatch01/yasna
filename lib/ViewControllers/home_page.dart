@@ -1,25 +1,30 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'StagerredView.dart';
-import '../Model/Note.dart';
-import 'NotePage.dart';
-import '../Model/Utility.dart';
+import 'package:flutter/services.dart';
+import 'stagerred_view.dart';
+import '../Model/note.dart';
+import 'note_page.dart';
+import '../Model/utility.dart';
 
-enum viewType {
-  List,
-  Staggered
+enum ViewType {
+  list,
+  staggered
 }
 
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key key}) : super(key: key);
+
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
 
-  var notesViewType ;
+  ViewType notesViewType ;
   @override void initState() {
-    notesViewType = viewType.Staggered;
+    super.initState();
+    notesViewType = ViewType.staggered;
   }
 
   @override
@@ -27,23 +32,29 @@ class _HomePageState extends State<HomePage> {
 
     return
       Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: AppBar(brightness: Brightness.light,
+        // resizeToAvoidBottomPadding: false,
+        appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+          ),
+
           actions: _appBarActions(),
           elevation: 1,
           backgroundColor: Colors.white,
           centerTitle: true,
-          title: Text("Notes"),
+          title: const Text("Notes"),
         ),
-        body: SafeArea(child:   _body(), right: true, left:  true, top: true, bottom: true,),
+        body: SafeArea(right: true, left:  true, top: true, bottom: true,child:   _body(),),
         bottomSheet: _bottomBar(),
       );
 
   }
 
   Widget _body() {
-    print(notesViewType);
-    return Container(child: StaggeredGridPage(notesViewType: notesViewType,));
+    if (kDebugMode) {
+      print(notesViewType);
+    }
+    return StaggeredGridPage(notesViewType: notesViewType,);
   }
 
   //Contains a FlatButton widget that is responsible for calling the _newNoteTapped function to take us to
@@ -52,8 +63,8 @@ class _HomePageState extends State<HomePage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        FlatButton(
-          child: Text(
+        TextButton(
+          child: const Text(
             "New Note\n",
             style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
           ),
@@ -66,7 +77,7 @@ class _HomePageState extends State<HomePage> {
 /* responsible for creating a new route using the Navigator.push class*/
   void _newNoteTapped(BuildContext ctx) {
     // "-1" id indicates the note is not new
-    var emptyNote = new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
+    var emptyNote = Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
     Navigator.push(ctx,MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
   }
 
@@ -74,12 +85,12 @@ class _HomePageState extends State<HomePage> {
   void _toggleViewType(){
     setState(() {
       CentralStation.updateNeeded = true;
-      if(notesViewType == viewType.List)
+      if(notesViewType == ViewType.list)
       {
-        notesViewType = viewType.Staggered;
+        notesViewType = ViewType.staggered;
 
       } else {
-        notesViewType = viewType.List;
+        notesViewType = ViewType.list;
       }
 
     });
@@ -89,12 +100,12 @@ class _HomePageState extends State<HomePage> {
 
     return [
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
             onTap: () => _toggleViewType() ,
             child: Icon(
-              notesViewType == viewType.List ?  Icons.developer_board : Icons.view_headline,
+              notesViewType == ViewType.list ?  Icons.developer_board : Icons.view_headline,
               color: CentralStation.fontColor,
             ),
           ),

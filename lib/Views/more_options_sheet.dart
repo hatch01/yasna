@@ -1,16 +1,18 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
-import 'ColorSlider.dart';
-import '../Model/Utility.dart';
+import 'color_slider.dart';
+import '../Model/utility.dart';
 
 
-enum moreOptions { delete, share, copy }
+enum MoreOptions { delete, share, copy }
 
 class MoreOptionsSheet extends StatefulWidget {
   final Color color;
   final DateTime date_last_edited;
   final void Function(Color) callBackColorTapped;
 
-  final void Function(moreOptions) callBackOptionTapped;
+  final void Function(MoreOptions) callBackOptionTapped;
 
   const MoreOptionsSheet(
       {Key key,
@@ -21,46 +23,47 @@ class MoreOptionsSheet extends StatefulWidget {
       : super(key: key);
 
   @override
-  _MoreOptionsSheetState createState() => _MoreOptionsSheetState();
+  MoreOptionsSheetState createState() => MoreOptionsSheetState();
 }
 
-class _MoreOptionsSheetState extends State<MoreOptionsSheet> {
-  var note_color;
+class MoreOptionsSheetState extends State<MoreOptionsSheet> {
+  Color note_color;
 
   @override
   void initState() {
+    super.initState();
     note_color = widget.color;
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: this.note_color,
-      child: new Wrap(
+      color: note_color,
+      child: Wrap(
         children: <Widget>[
-          new ListTile(
-              leading: new Icon(Icons.delete),
-              title: new Text('Delete permanently'),
+          ListTile(
+              leading: const Icon(Icons.delete),
+              title: const Text('Delete permanently'),
               onTap: () {
                 Navigator.of(context).pop();
-                widget.callBackOptionTapped(moreOptions.delete);
+                widget.callBackOptionTapped(MoreOptions.delete);
               }),
-          new ListTile(
-              leading: new Icon(Icons.content_copy),
-              title: new Text('Duplicate'),
+          ListTile(
+              leading: const Icon(Icons.content_copy),
+              title: const Text('Duplicate'),
               onTap: () {
                 Navigator.of(context).pop();
-                widget.callBackOptionTapped(moreOptions.copy);
+                widget.callBackOptionTapped(MoreOptions.copy);
               }),
-          new ListTile(
-              leading: new Icon(Icons.share),
-              title: new Text('Share'),
+          ListTile(
+              leading: const Icon(Icons.share),
+              title: const Text('Share'),
               onTap: () {
                 Navigator.of(context).pop();
-                widget.callBackOptionTapped(moreOptions.share);
+                widget.callBackOptionTapped(MoreOptions.share);
               }),
-          new Padding(
-            padding: EdgeInsets.only(left: 10, right: 10),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10),
             child: SizedBox(
               height: 44,
               width: MediaQuery.of(context).size.width,
@@ -71,8 +74,9 @@ class _MoreOptionsSheetState extends State<MoreOptionsSheet> {
               ),
             ),
           ),
-          new Row(
+          Row(
             crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
                 height: 44,
@@ -81,9 +85,8 @@ class _MoreOptionsSheetState extends State<MoreOptionsSheet> {
                         widget.date_last_edited))),
               )
             ],
-            mainAxisAlignment: MainAxisAlignment.center,
           ),
-          new ListTile()
+          const ListTile()
         ],
       ),
     );
@@ -91,7 +94,7 @@ class _MoreOptionsSheetState extends State<MoreOptionsSheet> {
 
   void _changeColor(Color color) {
     setState(() {
-      this.note_color = color;
+      note_color = color;
       widget.callBackColorTapped(color);
     });
   }

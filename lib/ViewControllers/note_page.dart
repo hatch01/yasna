@@ -1,47 +1,51 @@
+// ignore_for_file: non_constant_identifier_names
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../Model/Note.dart';
-import '../Model/SqliteHandler.dart';
-import 'dart:async';
-import '../Model/Utility.dart';
-import '../Views/MoreOptionsSheet.dart';
-import 'package:share/share.dart';
 import 'package:flutter/services.dart';
+import '../Model/note.dart';
+import '../Model/sqlite_handler.dart';
+import 'dart:async';
+import '../Model/utility.dart';
+import '../Views/more_options_sheet.dart';
+import 'package:share/share.dart';
 
 class NotePage extends StatefulWidget {
   final Note noteInEditing;
 
   //constructor that takes a Note object
-  NotePage(this.noteInEditing);
-
+  NotePage(this.noteInEditing, {Key key}) : super(key: key) {
+    // TODO: implement
+    throw UnimplementedError();
+  }
 
   @override
-  _NotePageState createState() => _NotePageState();
+  NotePageState createState() => NotePageState();
 }
 
-class _NotePageState extends State<NotePage> {
-
+class NotePageState extends State<NotePage> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
-  var note_color;
+  Color note_color;
   bool _isNewNote = false;
   final _titleFocus = FocusNode();
   final _contentFocus = FocusNode();
 
-  String _titleFrominitial ;
+  String _titleFrominitial;
+
   String _contentFromInitial;
   DateTime _lastEditedForUndo;
 
-
-
-  var _editableNote;
+  Note _editableNote;
 
   // the timer variable responsible to call persistData function every 5 seconds and cancel the timer when the page pops.
   Timer _persistenceTimer;
 
-  final GlobalKey<ScaffoldState> _globalKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
+    super.initState();
     _editableNote = widget.noteInEditing;
     _titleController.text = _editableNote.title;
     _contentController.text = _editableNote.content;
@@ -51,30 +55,34 @@ class _NotePageState extends State<NotePage> {
     _titleFrominitial = widget.noteInEditing.title;
     _contentFromInitial = widget.noteInEditing.content;
 
-
     if (widget.noteInEditing.id == -1) {
       _isNewNote = true;
     }
-    _persistenceTimer = new Timer.periodic(Duration(seconds: 5), (timer) {
+    _persistenceTimer = Timer.periodic(const Duration(seconds: 5), (timer) {
       // call insert query here
-      print("5 seconds passed");
-      print("editable note id: ${_editableNote.id}");
+      if (kDebugMode) {
+        print("5 seconds passed");
+        print("editable note id: ${_editableNote.id}");
+      }
       _persistData();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-
-    if(_editableNote.id == -1 && _editableNote.title.isEmpty) {
+    if (_editableNote.id == -1 && _editableNote.title.isEmpty) {
       FocusScope.of(context).requestFocus(_titleFocus);
     }
 
     return WillPopScope(
+      onWillPop: _readyToPop,
       child: Scaffold(
         key: _globalKey,
-        appBar: AppBar(brightness: Brightness.light,
-          leading: BackButton(
+        appBar: AppBar(
+          systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarBrightness: Brightness.light,
+          ),
+          leading: const BackButton(
             color: Colors.black,
           ),
           actions: _archiveAction(context),
@@ -84,32 +92,31 @@ class _NotePageState extends State<NotePage> {
         ),
         body: _body(context),
       ),
-      onWillPop: _readyToPop,
     );
   }
 
   Widget _body(BuildContext ctx) {
-    return
-
-      Container(
-          color: note_color,
-          padding: EdgeInsets.only(left: 16, right: 16, top: 12),
-          child:
-
-          SafeArea(child:
-          Column(
+    return Container(
+        color: note_color,
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
+        child: SafeArea(
+          left: true,
+          right: true,
+          top: false,
+          bottom: false,
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Flexible(
                 child: Container(
-                  padding: EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(5),
 //          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
                   child: EditableText(
                       onChanged: (str) => {updateNoteObject()},
                       maxLines: null,
                       controller: _titleController,
                       focusNode: _titleFocus,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22,
                           fontWeight: FontWeight.bold),
@@ -117,33 +124,27 @@ class _NotePageState extends State<NotePage> {
                       backgroundCursorColor: Colors.blue),
                 ),
               ),
-
-              Divider(color: CentralStation.borderColor,),
-
-              Flexible( child: Container(
-                  padding: EdgeInsets.all(5),
+              const Divider(
+                color: CentralStation.borderColor,
+              ),
+              Flexible(
+                  child: Container(
+                      padding: const EdgeInsets.all(5),
 //    decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1),borderRadius: BorderRadius.all(Radius.circular(10)) ),
-                  child: EditableText(
-                    onChanged: (str) => {updateNoteObject()},
-                    maxLines: 300, // line limit extendable later
-                    controller: _contentController,
-                    focusNode: _contentFocus,
-                    style: TextStyle(color: Colors.black, fontSize: 20),
-                    backgroundCursorColor: Colors.red,
-                    cursorColor: Colors.blue,
-                  )
-              )
-              )
-
+                      child: EditableText(
+                        onChanged: (str) => {updateNoteObject()},
+                        maxLines: 300,
+                        // line limit extendable later
+                        controller: _contentController,
+                        focusNode: _contentFocus,
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 20),
+                        backgroundCursorColor: Colors.red,
+                        cursorColor: Colors.blue,
+                      )))
             ],
           ),
-            left: true,right: true,top: false,bottom: false,
-          )
-      )
-
-
-
-    ;
+        ));
   }
 
   //returns a new text with "New Note" or "Edit Note" based on the value of _editableNote.id
@@ -151,17 +152,15 @@ class _NotePageState extends State<NotePage> {
     return Text(_editableNote.id == -1 ? "New Note" : "Edit Note");
   }
 
-
-
   List<Widget> _archiveAction(BuildContext context) {
     List<Widget> actions = [];
     if (widget.noteInEditing.id != -1) {
       actions.add(Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
             onTap: () => _undo(),
-            child: Icon(
+            child: const Icon(
               Icons.undo,
               color: CentralStation.fontColor,
             ),
@@ -171,11 +170,11 @@ class _NotePageState extends State<NotePage> {
     }
     actions += [
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
             onTap: () => _archivePopup(context),
-            child: Icon(
+            child: const Icon(
               Icons.archive,
               color: CentralStation.fontColor,
             ),
@@ -183,11 +182,11 @@ class _NotePageState extends State<NotePage> {
         ),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
             onTap: () => bottomSheet(context),
-            child: Icon(
+            child: const Icon(
               Icons.more_vert,
               color: CentralStation.fontColor,
             ),
@@ -195,11 +194,11 @@ class _NotePageState extends State<NotePage> {
         ),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
-            onTap: () => { _saveAndStartNewNote(context)  },
-            child: Icon(
+            onTap: () => {_saveAndStartNewNote(context)},
+            child: const Icon(
               Icons.add,
               color: CentralStation.fontColor,
             ),
@@ -233,7 +232,7 @@ class _NotePageState extends State<NotePage> {
 
       if (_editableNote.id == -1) {
         Future<int> autoIncrementedId =
-        noteDB.insertNote(_editableNote, true); // for new note
+            noteDB.insertNote(_editableNote, true); // for new note
         // set the id of the note from the database after inserting the new note so for next persisting
         autoIncrementedId.then((value) {
           _editableNote.id = value;
@@ -250,30 +249,34 @@ class _NotePageState extends State<NotePage> {
     _editableNote.content = _contentController.text;
     _editableNote.title = _titleController.text;
     _editableNote.note_color = note_color;
-    print("new content: ${_editableNote.content}");
-    print(widget.noteInEditing);
-    print(_editableNote);
-
-    print("same title? ${_editableNote.title == _titleFrominitial}");
-    print("same content? ${_editableNote.content == _contentFromInitial}");
-
+    if (kDebugMode) {
+      print("new content: ${_editableNote.content}");
+      print(widget.noteInEditing);
+      print(_editableNote);
+      print("same title? ${_editableNote.title == _titleFrominitial}");
+      print("same content? ${_editableNote.content == _contentFromInitial}");
+    }
 
     if (!(_editableNote.title == _titleFrominitial &&
-        _editableNote.content == _contentFromInitial) ||
+            _editableNote.content == _contentFromInitial) ||
         (_isNewNote)) {
       // No changes to the note
       // Change last edit time only if the content of the note is mutated in compare to the note which the page was called with.
       _editableNote.date_last_edited = DateTime.now();
-      print("Updating date_last_edited");
+      if (kDebugMode) {
+        print("Updating date_last_edited");
+      }
       CentralStation.updateNeeded = true;
     }
   }
 
   //Handles callbacks on the MoreOptionsSheet
-  void bottomSheetOptionTappedHandler(moreOptions tappedOption) {
-    print("option tapped: $tappedOption");
+  void bottomSheetOptionTappedHandler(MoreOptions tappedOption) {
+    if (kDebugMode) {
+      print("option tapped: $tappedOption");
+    }
     switch (tappedOption) {
-      case moreOptions.delete:
+      case MoreOptions.delete:
         {
           if (_editableNote.id != -1) {
             _deleteNote(_globalKey.currentContext);
@@ -282,17 +285,18 @@ class _NotePageState extends State<NotePage> {
           }
           break;
         }
-      case moreOptions.share:
+      case MoreOptions.share:
         {
           if (_editableNote.content.isNotEmpty) {
             Share.share("${_editableNote.title}\n${_editableNote.content}");
           }
           break;
         }
-      case moreOptions.copy : {
-        _copy();
-        break;
-      }
+      case MoreOptions.copy:
+        {
+          _copy();
+          break;
+        }
     }
   }
 
@@ -303,11 +307,11 @@ class _NotePageState extends State<NotePage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Confirm ?"),
-              content: Text("This note will be deleted permanently"),
+              title: const Text("Confirm ?"),
+              content: const Text("This note will be deleted permanently"),
               actions: <Widget>[
-                FlatButton(
-                    onPressed: ()  {
+                TextButton(
+                    onPressed: () {
                       _persistenceTimer.cancel();
                       var noteDB = NotesDBHandler();
                       Navigator.of(context).pop();
@@ -315,12 +319,11 @@ class _NotePageState extends State<NotePage> {
                       CentralStation.updateNeeded = true;
 
                       Navigator.of(context).pop();
-
                     },
-                    child: Text("Yes")),
-                FlatButton(
+                    child: const Text("Yes")),
+                TextButton(
                     onPressed: () => {Navigator.of(context).pop()},
-                    child: Text("No"))
+                    child: const Text("No"))
               ],
             );
           });
@@ -330,7 +333,9 @@ class _NotePageState extends State<NotePage> {
   //responsible for responding whenever the user selects on a color by changing the color and saving the color
   //value to the database
   void _changeColor(Color newColorSelected) {
-    print("note color changed");
+    if (kDebugMode) {
+      print("note color changed");
+    }
     setState(() {
       note_color = newColorSelected;
       _editableNote.note_color = newColorSelected;
@@ -343,16 +348,15 @@ class _NotePageState extends State<NotePage> {
     CentralStation.updateNeeded = true;
   }
 
-
-
   //this function is called whenever the user clicks on the plus icon to add a new note from
   //an already existing note.
-  void _saveAndStartNewNote(BuildContext context){
+  void _saveAndStartNewNote(BuildContext context) {
     _persistenceTimer.cancel();
-    var emptyNote = new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
+    var emptyNote =
+        Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
     Navigator.of(context).pop();
-    Navigator.push(context, MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
-
+    Navigator.push(
+        context, MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
   }
 
   Future<bool> _readyToPop() async {
@@ -372,15 +376,15 @@ class _NotePageState extends State<NotePage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Confirm ?"),
-              content: Text("This note will be archived"),
+              title: const Text("Confirm ?"),
+              content: const Text("This note will be archived"),
               actions: <Widget>[
-                FlatButton(
+                TextButton(
                     onPressed: () => _archiveThisNote(context),
-                    child: Text("Yes")),
-                FlatButton(
+                    child: const Text("Yes")),
+                TextButton(
                     onPressed: () => {Navigator.of(context).pop()},
-                    child: Text("No"))
+                    child: const Text("No"))
               ],
             );
           });
@@ -409,36 +413,33 @@ class _NotePageState extends State<NotePage> {
 
     Navigator.of(context).pop(); // pop back to staggered view
     // TODO: OPTIONAL show the toast of deletion completion
-    Scaffold.of(context).showSnackBar(new SnackBar(content: Text("deleted")));
-  }
 
+    ScaffoldMessenger.of(context)
+        .showSnackBar(const SnackBar(content: Text("deleted")));
+  }
 
   //this function duplicates a note with the selected id whenever
   //copy is tapped on from the bottom sheet
-  void _copy(){
+  void _copy() {
     var noteDB = NotesDBHandler();
-    Note copy = Note(-1,
-        _editableNote.title,
-        _editableNote.content,
-        DateTime.now(),
-        DateTime.now(),
-        _editableNote.note_color) ;
-
+    Note copy = Note(-1, _editableNote.title, _editableNote.content,
+        DateTime.now(), DateTime.now(), _editableNote.note_color);
 
     var status = noteDB.copyNote(copy);
-    status.then((query_success){
-      if (query_success){
+    status.then((querySuccess) {
+      if (querySuccess) {
         CentralStation.updateNeeded = true;
         Navigator.of(_globalKey.currentContext).pop();
       }
     });
   }
 
-
 //undo changes made to the text using FLutter's TextController method
   void _undo() {
-    _titleController.text = _titleFrominitial;// widget.noteInEditing.title;
-    _contentController.text = _contentFromInitial;// widget.noteInEditing.content;
-    _editableNote.date_last_edited = _lastEditedForUndo;// widget.noteInEditing.date_last_edited;
+    _titleController.text = _titleFrominitial; // widget.noteInEditing.title;
+    _contentController.text =
+        _contentFromInitial; // widget.noteInEditing.content;
+    _editableNote.date_last_edited =
+        _lastEditedForUndo; // widget.noteInEditing.date_last_edited;
   }
 }

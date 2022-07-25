@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'ViewControllers/HomePage.dart';
-import 'package:flutter/rendering.dart';
+import 'ViewControllers/home_page.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -15,13 +16,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         fontFamily: "Roboto",
-        iconTheme: IconThemeData(color: Colors.black),
-        primaryTextTheme: TextTheme(
-          title: TextStyle(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
+        primaryTextTheme: const TextTheme(
+          titleMedium: TextStyle(color: Colors.black),
         ),
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: const HomePage(),
 
     );
   }

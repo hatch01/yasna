@@ -1,8 +1,8 @@
-import 'package:sqflite/sqflite.dart';
+import 'package:flutter/foundation.dart';
+import 'package:sqflite/sqflite.dart' show ConflictAlgorithm, Database, getDatabasesPath, openDatabase;
 import 'package:path/path.dart';
-import 'package:sqflite/sqlite_api.dart';
 import 'dart:async';
-import 'Note.dart';
+import 'note.dart';
 
 class NotesDBHandler {
 
@@ -25,8 +25,9 @@ class NotesDBHandler {
 
 
   Future<Database> get database async {
-    if (_database != null)
+    if (_database != null) {
       return _database;
+    }
 
     _database = await initDB();
     return _database;
@@ -39,7 +40,9 @@ class NotesDBHandler {
     // ignore: argument_type_not_assignable
     Database dbConnection = await openDatabase(
         dbPath, version: 1, onCreate: (Database db, int version) async {
-      print("executing create query from onCreate callback");
+      if (kDebugMode) {
+        print("executing create query from onCreate callback");
+      }
       await db.execute(_buildCreateQuery());
     });
 
@@ -55,7 +58,9 @@ class NotesDBHandler {
     query += tableName;
     query += "(";
     fieldMap.forEach((column, field){
-      print("$column : $field");
+      if (kDebugMode) {
+        print("$column : $field");
+      }
       query += "$column $field,";
     });
 
@@ -75,7 +80,9 @@ class NotesDBHandler {
   Future<int> insertNote(Note note, bool isNew) async {
     // Get a reference to the database
     final Database db = await database;
-    print("insert called");
+    if (kDebugMode) {
+      print("insert called");
+    }
 
     // Insert the Notes into the correct table.
     await db.insert('notes',
@@ -100,8 +107,10 @@ class NotesDBHandler {
     final Database db = await database;
     try {
       await db.insert("notes",note.toMap(false), conflictAlgorithm: ConflictAlgorithm.replace);
-    } catch(Error) {
-      print(Error);
+    } on Error {
+      if (kDebugMode) {
+        print(Error);
+      }
       return false;
     }
     return true;
@@ -117,6 +126,7 @@ class NotesDBHandler {
       db.update("notes", note.toMap(true), where: "id = ?",
           whereArgs: [idToUpdate]);
     }
+    return true;
   }
 
   Future<bool> deleteNote(Note note) async {
@@ -125,11 +135,14 @@ class NotesDBHandler {
       try {
         await db.delete("notes",where: "id = ?",whereArgs: [note.id]);
         return true;
-      } catch (Error){
-        print("Error deleting ${note.id}: ${Error.toString()}");
+      } on Error{
+        if (kDebugMode) {
+          print("Error deleting ${note.id}: $Error");
+        }
         return false;
       }
     }
+    return true;
   }
 
 
