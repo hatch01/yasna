@@ -83,16 +83,20 @@ class _FlutterQuillTestState extends State<FlutterQuillTest> {
     final block = quill.BlockEmbed.custom(
       ErrorBlockEmbed(_controller.document.getPlainText(index, length)),
     );
-    print("!!!");
+    if (kDebugMode) {
+      print("!!!");
+      print(block);
+    }
     // print(quill.get(controller, 0));
     // final offset =
     //     quill.getEmbedNode(controller, controller.selection.start).item1;
-    print(block);
 
     _controller.replaceText(
         index, length, block, TextSelection.collapsed(offset: index));
-    print("!!!!!!!!!!!!!!!!");
-    print(_controller.document.toDelta());
+    if (kDebugMode) {
+      print("!!!!!!!!!!!!!!!!");
+      print(_controller.document.toDelta());
+    }
   }
 
   Widget customElementsEmbedBuilder(
@@ -105,7 +109,9 @@ class _FlutterQuillTestState extends State<FlutterQuillTest> {
     switch (block.type) {
       case 'error':
         final notes = block.data;
-        print("error");
+        if (kDebugMode) {
+          print("error");
+        }
         return Container(
           color: Colors.red,
           child: Text(
@@ -115,7 +121,9 @@ class _FlutterQuillTestState extends State<FlutterQuillTest> {
           ),
         );
       default:
-        print("default");
+        if (kDebugMode) {
+          print("default");
+        }
         return const SizedBox();
     }
   }
@@ -123,10 +131,12 @@ class _FlutterQuillTestState extends State<FlutterQuillTest> {
 
 class ErrorBlockEmbed extends quill.CustomBlockEmbed {
   ErrorBlockEmbed(String value) : super(noteType, value) {
-    print("creation");
-    print(noteType);
-    print(value);
-    print(data);
+    if (kDebugMode) {
+      print("creation");
+      print(noteType);
+      print(value);
+      print(data);
+    }
   }
 
   static const String noteType = 'error';
