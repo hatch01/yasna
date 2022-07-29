@@ -1,29 +1,61 @@
 import 'package:flutter/material.dart';
-import 'ViewControllers/home_page.dart';
+import 'package:yasna/functionality/flutter_quill_test.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        fontFamily: "Roboto",
-        iconTheme: const IconThemeData(color: Colors.black),
-        primaryTextTheme: const TextTheme(
-          titleMedium: TextStyle(color: Colors.black),
-        ),
         primarySwatch: Colors.blue,
       ),
-      home: const HomePage(),
+      home: const Home2(),
+    );
+  }
+}
 
+class Home2 extends StatefulWidget {
+  const Home2({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<Home2> createState() => _Home2State();
+}
+
+class _Home2State extends State<Home2> {
+  Widget body = const FlutterQuillTest();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  body = const FlutterQuillTest();
+                });
+                Navigator.pop(context);
+              },
+              child: const Text("FlutterQuillTest"),
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        title: const Text("appbar"),
+      ),
+      body: body,
     );
   }
 }
