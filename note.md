@@ -8,3 +8,9 @@
 
 - intégration de dessins eventuellement ca devrait le faire sans soucis
 - intégration de voice recognition : https://picovoice.ai/docs/cheetah/     https://pub.dev/packages/cheetah_flutter
+
+
+
+
+
+https://dribbble.com/shots/11875872-A-simple-and-lightweight-note-app
