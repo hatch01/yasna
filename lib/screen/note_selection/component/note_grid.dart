@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:sizer/sizer.dart';
 import 'package:yasna/screen/note_selection/component/res.dart';
 
 import '../controller/note_bloc.dart';
@@ -20,20 +19,10 @@ class NoteGrid extends StatelessWidget {
             mainAxisSpacing: 8,
             crossAxisSpacing: 8,
             repeatPattern: QuiltedGridRepeatPattern.inverted,
-            pattern: [
-              QuiltedGridTile(1, 1),
-              QuiltedGridTile(1, 1),
-              QuiltedGridTile(1, 2),
-              QuiltedGridTile(2, 1),
-              QuiltedGridTile(1, 1),
-              QuiltedGridTile(2, 1),
-              QuiltedGridTile(1, 1),
-            ],
+            pattern: Res.gridPatern,
           ),
           childrenDelegate: SliverChildBuilderDelegate(
             (context, index) {
-              print("!!!!!!!!!!!");
-              print(index % (state.noteList.length));
               if (index < state.noteList.length) {
                 return NoteTile(
                   tileType: Res.tileTypes[index % 7],

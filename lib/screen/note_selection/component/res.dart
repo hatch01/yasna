@@ -3,6 +3,17 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class Res {
   static String appBarTitle = "Notes";
+
+  static List<QuiltedGridTile> gridPatern = [
+    const QuiltedGridTile(1, 1),
+    const QuiltedGridTile(1, 1),
+    const QuiltedGridTile(1, 2),
+    const QuiltedGridTile(2, 1),
+    const QuiltedGridTile(1, 1),
+    const QuiltedGridTile(2, 1),
+    const QuiltedGridTile(1, 1),
+  ];
+
   static List<Color> tileColors = [
     const Color(0xFFffab91),
     const Color(0xFFffcc80),
