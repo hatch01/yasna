@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:yasna/screen/note_selection/component/res.dart';
 
-import '../controller/note.dart';
+import '../model/note.dart';
 
 class NoteTile extends StatelessWidget {
   final Note note;

@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
 import '../component/res.dart';
-import 'note.dart';
+import '../model/note.dart';
 
 part 'note_event.dart';
 
