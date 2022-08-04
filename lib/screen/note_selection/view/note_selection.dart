@@ -16,7 +16,7 @@ class NoteSelection extends StatelessWidget {
       create: (context) => NoteBloc(),
       child: Scaffold(
         backgroundColor: MainRes.backgroundColor,
-        appBar: CustomAppBar(),
+        appBar: const CustomAppBar(),
         body: const NoteGrid(),
         floatingActionButton: ElevatedButton(
           onPressed: () {},

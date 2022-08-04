@@ -30,6 +30,7 @@ class NoteGrid extends StatelessWidget {
                   id: index,
                 );
               }
+              return null;
             },
           ),
           // itemCount: state.noteList.length,

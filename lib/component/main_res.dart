@@ -6,4 +6,6 @@ class MainRes {
   static Color foregroundColor = const Color.fromARGB(255, 251, 251, 251);
 
   static String noteOverViewHiveBoxName = "noteOver";
+
+  static Duration animationDuration = const Duration(milliseconds: 300);
 }

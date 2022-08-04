@@ -1,6 +1,5 @@
 part of 'note_bloc.dart';
 
-@immutable
 abstract class NoteState {
   late List<Note> noteList = [];
   bool searching = false;
@@ -31,7 +30,9 @@ class NoteFilterReseting extends NoteState {
 class NoteFilterStarting extends NoteState {
   NoteFilterStarting({required List<Note> fullNoteList}) {
     searching = true;
-    print(fullNoteList);
+    if (kDebugMode) {
+      print(fullNoteList);
+    }
     noteList = fullNoteList;
   }
 }

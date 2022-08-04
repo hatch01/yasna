@@ -1,4 +1,6 @@
+// ignore: depend_on_referenced_packages
 import 'package:bloc/bloc.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../component/res.dart';
@@ -13,7 +15,9 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
   NoteBloc() : super(NoteRetrieving()) {
     fullNoteList = state.noteList;
-    print(fullNoteList);
+    if (kDebugMode) {
+      print(fullNoteList);
+    }
     // on<NoteEvent>((event, emit) {
     //   // TODO: implement event handler
     // });
