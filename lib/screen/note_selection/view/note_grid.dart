@@ -4,7 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:yasna/screen/note_selection/component/res.dart';
 
 import '../controller/note_bloc.dart';
-import 'note_tile.dart';
+import '../component/note_tile.dart';
 
 class NoteGrid extends StatelessWidget {
   const NoteGrid({Key? key}) : super(key: key);
@@ -12,6 +12,7 @@ class NoteGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NoteBloc, NoteState>(
+      buildWhen: (lastState, state) => lastState.noteList != state.noteList,
       builder: (context, state) {
         return GridView.custom(
           gridDelegate: SliverQuiltedGridDelegate(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../../component/main_res.dart';
+import '../component/res.dart';
 import '../controller/note_bloc.dart';
 
 class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
@@ -18,10 +19,13 @@ class CustomAppBar extends StatefulWidget with PreferredSizeWidget {
 class _CustomAppBarState extends State<CustomAppBar> {
   double returnOpacity = 0.0;
   double searchOpacity = 1.0;
+  double titleOpacity = 1.0;
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NoteBloc, NoteState>(
+      buildWhen: (previousState, state) =>
+          previousState.searching != state.searching,
       builder: (context, state) {
         return AppBar(
             backgroundColor: MainRes.backgroundColor,
@@ -30,6 +34,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
               fit: StackFit.loose,
               alignment: Alignment.center,
               children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: AnimatedOpacity(
+                        duration: MainRes.animationDuration,
+                        opacity: titleOpacity,
+                        child: Text(Res.appBarTitle))),
                 Align(
                   alignment: Alignment.centerRight,
                   child: AnimatedContainer(
@@ -45,6 +55,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
                       padding: EdgeInsets.all(2.w),
@@ -63,6 +74,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                 Future.delayed(MainRes.animationDuration, () {
                                   setState(() {
                                     searchOpacity = 1.0;
+                                    titleOpacity = 1.0;
                                     context.read<NoteBloc>().add(StopFilter());
                                   });
                                 });
@@ -75,11 +87,22 @@ class _CustomAppBarState extends State<CustomAppBar> {
                       ),
                     ),
                     if (state.searching)
-                      Expanded(child: TextField(
-                        onChanged: (text) {
-                          context.read<NoteBloc>().add(Filter(filter: text));
-                        },
-                      ))
+                      Expanded(
+                        child: TextField(
+                          decoration: const InputDecoration(
+                              focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent))),
+                          cursorColor: Colors.white,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            decorationColor: Colors.white,
+                          ),
+                          onChanged: (text) {
+                            context.read<NoteBloc>().add(Filter(filter: text));
+                          },
+                        ),
+                      )
                     else
                       const Spacer(),
                     Padding(
@@ -97,6 +120,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             });
                             setState(() {
                               searchOpacity = 0.0;
+                              titleOpacity = 0.0;
                               context.read<NoteBloc>().add(StartFilter());
                             });
                           },
