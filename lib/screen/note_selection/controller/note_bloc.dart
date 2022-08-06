@@ -33,58 +33,77 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   void _onRetrieveNote(event, emit) {
     List<Note> noteList = [
       Note(
+          key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
       Note(
+          key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
       Note(
+          key: UniqueKey(),
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+      Note(
+          key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
@@ -110,9 +129,8 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
   }
 
   void _onStartFilter(StartFilter event, emit) {
-    print("_onStartFilter");
-    print(lastFilter);
     emit(NoteFilterStarting(noteList: state.noteList, filter: lastFilter));
+    add(Filter(filter: lastFilter));
   }
 
   void _onStopFilter(StopFilter event, emit) {

@@ -4,5 +4,6 @@ class Note{
   DateTime date;
   String title;
   Color couleur;
-  Note({required this.couleur, required this.date, required this.title});
+  Key key;
+  Note({required this.couleur, required this.date, required this.title, required this.key});
 }
