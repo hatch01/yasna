@@ -12,3 +12,5 @@ class Filter extends NoteEvent {
 class StartFilter extends NoteEvent {}
 
 class StopFilter extends NoteEvent {}
+
+class RetrieveNote extends NoteEvent {}

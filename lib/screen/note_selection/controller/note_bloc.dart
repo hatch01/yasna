@@ -12,8 +12,9 @@ part 'note_state.dart';
 
 class NoteBloc extends Bloc<NoteEvent, NoteState> {
   late List<Note> fullNoteList;
+  String lastFilter = "";
 
-  NoteBloc() : super(NoteRetrieving()) {
+  NoteBloc() : super(const NoteRetrieving()) {
     fullNoteList = state.noteList;
     if (kDebugMode) {
       print(fullNoteList);
@@ -21,14 +22,101 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
     // on<NoteEvent>((event, emit) {
     //   // TODO: implement event handler
     // });
-    on<Filter>((event, emit) {
-      emit(NoteFiltering(filter: event.filter, fullNoteList: fullNoteList));
-    });
-    on<StartFilter>((event, emit) {
-      emit(NoteFilterStarting(fullNoteList: fullNoteList));
-    });
-    on<StopFilter>((event, emit) {
-      emit(NoteFilterReseting(fullNoteList: fullNoteList));
-    });
+    on<RetrieveNote>(_onRetrieveNote);
+    on<Filter>(_onFilter);
+    on<StartFilter>(_onStartFilter);
+    on<StopFilter>(_onStopFilter);
+
+    add(RetrieveNote());
+  }
+
+  void _onRetrieveNote(event, emit) {
+    List<Note> noteList = [
+      Note(
+          couleur: Colors.red,
+          date: DateTime(2020, 10, 10, 10, 10),
+          title: "mon titre de qualité"),
+      Note(
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+      Note(
+          couleur: Colors.red,
+          date: DateTime(2020, 10, 10, 10, 10),
+          title: "mon titre de qualité"),
+      Note(
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+      Note(
+          couleur: Colors.red,
+          date: DateTime(2020, 10, 10, 10, 10),
+          title: "mon titre de qualité"),
+      Note(
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+      Note(
+          couleur: Colors.red,
+          date: DateTime(2020, 10, 10, 10, 10),
+          title: "mon titre de qualité"),
+      Note(
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+      Note(
+          couleur: Colors.red,
+          date: DateTime(2020, 10, 10, 10, 10),
+          title: "mon titre de qualité"),
+      Note(
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+      Note(
+          couleur: Colors.red,
+          date: DateTime(2020, 10, 10, 10, 10),
+          title: "mon titre de qualité"),
+      Note(
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+      Note(
+          couleur: Colors.red,
+          date: DateTime(2020, 10, 10, 10, 10),
+          title: "mon titre de qualité"),
+      Note(
+          couleur: Colors.green,
+          date: DateTime(2020, 11, 11, 11, 11),
+          title: "mon titre de qualité le deuxieme"),
+    ];
+    fullNoteList = noteList;
+    emit(NoteReady(noteList: noteList, searching: false));
+  }
+
+  void _onFilter(Filter event, emit) {
+    emit(NoteFiltering(noteList: state.noteList, filter: event.filter));
+    lastFilter = event.filter;
+    List<Note> filteredNoteList = fullNoteList
+        .where((element) =>
+            element.title.toLowerCase().contains(event.filter) ||
+            Res.monthToName[element.date.month]
+                .toString()
+                .toLowerCase()
+                .contains(event.filter) ||
+            element.date.toString().toLowerCase().contains(event.filter))
+        .toList();
+    emit(NoteReady(
+        searching: true, noteList: filteredNoteList, filter: event.filter));
+  }
+
+  void _onStartFilter(StartFilter event, emit) {
+    print("_onStartFilter");
+    print(lastFilter);
+    emit(NoteFilterStarting(noteList: state.noteList, filter: lastFilter));
+  }
+
+  void _onStopFilter(StopFilter event, emit) {
+    emit(NoteFilterReseting(filter: lastFilter));
+    emit(NoteReady(noteList: fullNoteList, filter: lastFilter));
   }
 }

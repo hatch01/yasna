@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:yasna/component/loading.dart';
 import 'package:yasna/screen/note_selection/component/res.dart';
 
 import '../controller/note_bloc.dart';
@@ -14,6 +15,11 @@ class NoteGrid extends StatelessWidget {
     return BlocBuilder<NoteBloc, NoteState>(
       buildWhen: (lastState, state) => lastState.noteList != state.noteList,
       builder: (context, state) {
+        if (state is NoteRetrieving ||
+            state is NoteFiltering ||
+            state is NoteFilterReseting) {
+          return const Loading();
+        }
         return GridView.custom(
           gridDelegate: SliverQuiltedGridDelegate(
             crossAxisCount: 2,

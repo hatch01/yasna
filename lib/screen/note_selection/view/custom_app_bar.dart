@@ -20,6 +20,8 @@ class _CustomAppBarState extends State<CustomAppBar> {
   double returnOpacity = 0.0;
   double searchOpacity = 1.0;
   double titleOpacity = 1.0;
+  double textFieldOpacity = 0.0;
+  TextEditingController textEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                                 });
                                 setState(() {
                                   returnOpacity = 0.0;
+                                  textFieldOpacity = 0.0;
                                 });
                               },
                               icon: const Icon(Icons.arrow_back)),
@@ -88,19 +91,26 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     ),
                     if (state.searching)
                       Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(
-                              focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent))),
-                          cursorColor: Colors.white,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            decorationColor: Colors.white,
+                        child: AnimatedOpacity(
+                          opacity: textFieldOpacity,
+                          duration: MainRes.animationDuration,
+                          child: TextField(
+                            controller: textEditingController,
+                            decoration: const InputDecoration(
+                                focusedBorder: UnderlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent))),
+                            cursorColor: Colors.white,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              decorationColor: Colors.white,
+                            ),
+                            onChanged: (text) {
+                              context
+                                  .read<NoteBloc>()
+                                  .add(Filter(filter: text));
+                            },
                           ),
-                          onChanged: (text) {
-                            context.read<NoteBloc>().add(Filter(filter: text));
-                          },
                         ),
                       )
                     else
@@ -116,6 +126,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                             Future.delayed(MainRes.animationDuration, () {
                               setState(() {
                                 returnOpacity = 1.0;
+                                textFieldOpacity = 1.0;
                               });
                             });
                             setState(() {
