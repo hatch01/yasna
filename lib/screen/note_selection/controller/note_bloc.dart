@@ -32,77 +32,77 @@ class NoteBloc extends Bloc<NoteEvent, NoteState> {
 
   void _onRetrieveNote(event, emit) {
     List<Note> noteList = [
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.red,
           date: DateTime(2020, 10, 10, 10, 10),
           title: "mon titre de qualité"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),
           title: "mon titre de qualité le deuxieme"),
-      Note(
+     Note(path:"/",
           key: UniqueKey(),
           couleur: Colors.green,
           date: DateTime(2020, 11, 11, 11, 11),

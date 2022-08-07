@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 import 'package:yasna/screen/note_selection/component/res.dart';
 
@@ -19,45 +19,49 @@ class NoteTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        if (kDebugMode) {
-          print("click on ${note.title}");
-        }
-      },
-      child: Container(
-        // margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-        // width: 100.w,
-        height: 50.h,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: Res.tileColors[id % 7],
+    return Container(
+      // margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+      // width: 100.w,
+      height: 50.h,
+      decoration: BoxDecoration(
+        color: Res.tileColors[id % 7],
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
           borderRadius: BorderRadius.circular(8),
-        ),
-        child: Column(
-
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: tileType == TileType.horRect
-                  ? const EdgeInsets.only(right: 100)
-                  : null,
-              child: Text(
-                note.title,
-                maxLines: _getMaxLines(tileType),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+          onTap: () {
+            GoRouter.of(context)
+                .go("RouteRes.noteEditor${note.path}/${note.title}");
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "${note.date.day} ${Res.monthToName[note.date.month]} ${note.date.year}",
+                Container(
+                  padding: tileType == TileType.horRect
+                      ? const EdgeInsets.only(right: 100)
+                      : null,
+                  child: Text(
+                    note.title,
+                    maxLines: _getMaxLines(tileType),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      "${note.date.day} ${Res.monthToName[note.date.month]} ${note.date.year}",
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
