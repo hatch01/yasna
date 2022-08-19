@@ -46,13 +46,13 @@ class _CustomAppBarState extends State<CustomAppBar> {
                   alignment: Alignment.centerRight,
                   child: AnimatedContainer(
                     duration: MainRes.animationDuration,
-                    margin: EdgeInsets.only(right: 3.w),
+                    margin: EdgeInsets.only(right: 2.w),
                     height: 10.w,
                     width: (state.searching) ? 87.w : 10.w,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: MainRes.buttonBackgroundColor,
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(10))),
+                            BorderRadius.all(Radius.circular(10))),
                   ),
                 ),
                 Row(

@@ -22,11 +22,10 @@ class MyApp extends StatelessWidget {
         },
       ),
       GoRoute(
-        path: RouteRes.noteEditor,
+        path: "${RouteRes.noteEditor}/:path",
         builder: (BuildContext context, GoRouterState state) {
-          String? path = state.extra as String?;
-          print(path);
-          return const NoteEdition();
+          String path = state.params['path']!;
+          return NoteEdition(noteName: path);
         },
       ),
     ],
@@ -37,6 +36,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
       return MaterialApp.router(
+
         routeInformationProvider: _router.routeInformationProvider,
         routeInformationParser: _router.routeInformationParser,
         routerDelegate: _router.routerDelegate,

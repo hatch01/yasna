@@ -12,7 +12,7 @@ class ActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
-        GoRouter.of(context).go(RouteRes.noteEditor);
+        GoRouter.of(context).push(RouteRes.noteEditor);
       },
       style: ButtonStyle(
         backgroundColor:

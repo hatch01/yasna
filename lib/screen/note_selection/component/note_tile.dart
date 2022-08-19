@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 import 'package:yasna/screen/note_selection/component/res.dart';
 
+import '../../../component/route_res.dart';
 import '../model/note.dart';
 
 class NoteTile extends StatelessWidget {
@@ -32,8 +33,12 @@ class NoteTile extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
           onTap: () {
-            GoRouter.of(context)
-                .go("RouteRes.noteEditor${note.path}/${note.title}");
+            String path = "${RouteRes.noteEditor}${note.path}${note.title}";
+            while (path.contains("//")) {
+              //on dégage les double slash
+              path = path.replaceAll("//", "/");
+            }
+            GoRouter.of(context).go(path);
           },
           child: Padding(
             padding: const EdgeInsets.all(20),

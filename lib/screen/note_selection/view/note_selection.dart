@@ -14,11 +14,11 @@ class NoteSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NoteBloc(),
-      child: Scaffold(
+      child: const Scaffold(
         backgroundColor: MainRes.backgroundColor,
-        appBar: const CustomAppBar(),
-        body: const NoteGrid(),
-        floatingActionButton: const ActionButton(),
+        appBar: CustomAppBar(),
+        body: NoteGrid(),
+        floatingActionButton: ActionButton(),
       ),
     );
   }
