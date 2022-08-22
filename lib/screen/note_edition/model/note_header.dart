@@ -11,4 +11,9 @@ class NoteHeader {
   String summary;
 
   NoteHeader({required this.title, required this.summary});
+
+  @override
+  String toString() {
+    return "title : $title , summary $summary";
+  }
 }

@@ -21,12 +21,33 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
           padding: EdgeInsets.all(2.w),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CustomIconButton(
                   icon: Icons.arrow_back,
                   onTap: () {
                     GoRouter.of(context).pop();
                   }),
+              Container(
+                width: 75.w,
+                padding: EdgeInsets.only(bottom: 0.8.h),
+                child: TextField(
+                  textAlignVertical: TextAlignVertical.center,
+                  controller: context.read<EditorBloc>().textEditingController,
+                  readOnly: state.readOnly,
+                  decoration: InputDecoration(
+                    focusedBorder: (!state.readOnly)
+                        ? UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: MainRes.foregroundColor, width: 0.3.h),
+                          )
+                        : const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                  ),
+                  cursorColor: MainRes.foregroundColor,
+                  style: const TextStyle(color: MainRes.foregroundColor),
+                ),
+              ),
               Stack(
                 children: [
                   AnimatedOpacity(

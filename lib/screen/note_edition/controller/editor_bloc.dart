@@ -9,8 +9,8 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:yasna/screen/note_edition/model/note_header.dart';
 
 import '../../../component/main_res.dart';
@@ -22,13 +22,13 @@ part 'editor_state.dart';
 class EditorBloc extends Bloc<EditorEvent, EditorState> {
   final String notePath;
   QuillController? controller;
+  final TextEditingController textEditingController = TextEditingController();
 
   EditorBloc(this.notePath) : super(const EditorInitial()) {
     on<EditorEvent>((event, emit) {
       // TODO: implement event handler
     });
     on<Edit>((event, emit) {
-      print("edit !!!!");
       emit(const EditorEditing());
     });
     on<Save>(onSave);
@@ -46,9 +46,6 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     File noteFile = File(documentsDir.path + notePath);
     String data = noteFile.readAsStringSync();
     var decodedData = (jsonDecode(data));
-    print("data : $data");
-    print("decodedData : $decodedData");
-    print(decodedData.runtimeType);
     // Document doc = Document();
     Document doc = Document.fromJson(decodedData);
     controller = QuillController(
@@ -57,11 +54,15 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
           baseOffset: doc.length - 1,
           extentOffset: doc.length - 1,
         ));
-    print(controller);
+
+    var box = await Hive.openBox<NoteHeader>(MainRes.noteOverViewHiveBoxName);
+    NoteHeader? header = box.get(notePath);
+    box.close();
+    textEditingController.text = (header != null) ? header.title : "";
     emit(const EditorReadOnly(readOnly: true));
   }
 
-  void onSave(event, emit) async {
+  void onSave(Save event, emit) async {
     final documentsDir = await getApplicationDocumentsDirectory();
     if (kDebugMode) {
       print("onsave : ${documentsDir.path + notePath}");
@@ -70,12 +71,16 @@ class EditorBloc extends Bloc<EditorEvent, EditorState> {
     noteFile.writeAsStringSync(
         jsonEncode(controller!.document.toDelta().toJson()),
         mode: FileMode.write);
+
     var box = await Hive.openBox<NoteHeader>(MainRes.noteOverViewHiveBoxName);
     NoteHeader? header = box.get(notePath);
+
+    header ??= NoteHeader(title: "title", summary: "summary");
+    header.title = textEditingController.text;
+    header.summary = "${controller!.document.toPlainText().substring(0, 50)}..";
+    box.put(notePath, header);
     box.close();
 
-    // header.title = Res.controller.document.line
-    // print(Res.controller.document.toJS().toString());
     emit(const EditorReadOnly(readOnly: true));
   }
 }

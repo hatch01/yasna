@@ -39,12 +39,10 @@ class _BodyState extends State<Body> {
               color: MainRes.foregroundColor,
             ));
           }
-          print(state);
           if (lastState.readOnly != state.readOnly) {
             if (state.readOnly) {
               showOpacity = false;
               Future.delayed(MainRes.animationDuration, () {
-                print("first set state");
                 setState(() {
                   displayEditor = false;
                 });
@@ -52,7 +50,6 @@ class _BodyState extends State<Body> {
             } else {
               displayEditor = true;
               Future.delayed(MainRes.animationDuration, () {
-                print("second set state");
                 setState(() {
                   showOpacity = true;
                 });
