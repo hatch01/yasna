@@ -13,11 +13,13 @@ class NoteEdition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => EditorBloc(),
-      child: const Scaffold(
-        backgroundColor: MainRes.backgroundColor,
-        appBar: CustomAppBar(),
-        body: Body(),
+      create: (context) => EditorBloc(noteName),
+      child: const SafeArea(
+        child: Scaffold(
+          backgroundColor: MainRes.backgroundColor,
+          appBar: CustomAppBar(),
+          body: Body(),
+        ),
       ),
     );
   }

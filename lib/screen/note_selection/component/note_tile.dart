@@ -38,7 +38,7 @@ class NoteTile extends StatelessWidget {
               //on dégage les double slash
               path = path.replaceAll("//", "/");
             }
-            GoRouter.of(context).go(path);
+            GoRouter.of(context).push(path);
           },
           child: Padding(
             padding: const EdgeInsets.all(20),

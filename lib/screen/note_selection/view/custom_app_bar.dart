@@ -30,6 +30,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
           previousState.searching != state.searching,
       builder: (context, state) {
         return AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: MainRes.backgroundColor,
             elevation: 0,
             title: Stack(
@@ -51,8 +52,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
                     width: (state.searching) ? 87.w : 10.w,
                     decoration: const BoxDecoration(
                         color: MainRes.buttonBackgroundColor,
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(10))),
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
                   ),
                 ),
                 Row(

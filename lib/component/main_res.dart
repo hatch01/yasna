@@ -9,4 +9,6 @@ class MainRes {
   static const String noteOverViewHiveBoxName = "noteOver";
 
   static const Duration animationDuration = Duration(milliseconds: 300);
+
+  static const String noteHeaderBox = "noteHeader";
 }

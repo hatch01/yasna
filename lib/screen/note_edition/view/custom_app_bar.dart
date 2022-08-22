@@ -25,9 +25,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               CustomIconButton(
                   icon: Icons.arrow_back,
                   onTap: () {
-                    GoRouter.of(context).push("/");
+                    GoRouter.of(context).pop();
                   }),
-
               Stack(
                 children: [
                   AnimatedOpacity(

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' hide EditorState;
 import 'package:sizer/sizer.dart';
-import 'package:yasna/screen/note_edition/component/res.dart';
 
 import '../../../component/main_res.dart';
 import '../../../component/toolbar.dart';
+import '../component/text_editor.dart';
 import '../controller/editor_bloc.dart';
 
 class Body extends StatefulWidget {
@@ -18,6 +18,7 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   bool displayEditor = false;
   bool showOpacity = false;
+  late EditorState lastState;
 
   @override
   Widget build(BuildContext context) {
@@ -27,24 +28,38 @@ class _BodyState extends State<Body> {
           ),
       child: BlocBuilder<EditorBloc, EditorState>(
         buildWhen: (oldState, newState) {
-          return oldState.readOnly != newState.readOnly;
+          return (oldState.readOnly != newState.readOnly) ||
+              oldState is EditorInitial;
         },
         builder: (context, state) {
-          if (state.readOnly) {
-            showOpacity = false;
-            Future.delayed(MainRes.animationDuration, () {
-              setState(() {
-                displayEditor = false;
-              });
-            });
-          } else {
-            displayEditor = true;
-            Future.delayed(MainRes.animationDuration, () {
-              setState(() {
-                showOpacity = true;
-              });
-            });
+          if (context.read<EditorBloc>().controller == null) {
+            lastState = state;
+            return const Center(
+                child: CircularProgressIndicator(
+              color: MainRes.foregroundColor,
+            ));
           }
+          print(state);
+          if (lastState.readOnly != state.readOnly) {
+            if (state.readOnly) {
+              showOpacity = false;
+              Future.delayed(MainRes.animationDuration, () {
+                print("first set state");
+                setState(() {
+                  displayEditor = false;
+                });
+              });
+            } else {
+              displayEditor = true;
+              Future.delayed(MainRes.animationDuration, () {
+                print("second set state");
+                setState(() {
+                  showOpacity = true;
+                });
+              });
+            }
+          }
+          lastState = state;
           return Column(
             children: [
               AnimatedContainer(
@@ -56,7 +71,7 @@ class _BodyState extends State<Body> {
                   child: SizedBox(
                     width: 100.w,
                     child: ToolBar(
-                      controller: Res.controller,
+                      controller: context.read<EditorBloc>().controller!,
                       iconTheme: QuillIconTheme(
                           iconSelectedColor: MainRes.foregroundColor,
                           iconUnselectedColor: MainRes.foregroundColor,
@@ -67,19 +82,7 @@ class _BodyState extends State<Body> {
                   ),
                 ),
               ),
-              QuillEditor(
-                scrollController: ScrollController(),
-                expands: false,
-                autoFocus: true,
-                focusNode: FocusNode(),
-                scrollable: true,
-                padding: EdgeInsets.zero,
-                controller: Res.controller,
-                customStyles: DefaultStyles(
-                  color: Colors.white,
-                ),
-                readOnly: state.readOnly,
-              ),
+              TextEditor(readOnly: state.readOnly),
             ],
           );
         },
